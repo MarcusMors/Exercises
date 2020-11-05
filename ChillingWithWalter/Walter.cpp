@@ -13,9 +13,59 @@ using namespace std;
  * can't reach a point over 45°
  */
 
-int abs(int num)
+/* Tests
+Input
+2
+1 2 5
+4 3 3
+Output
+3
+*/
+
+void printMx3(long long arr[][3])
+{
+	long long length = sizeof(arr);
+	for (int i = 0; i < length; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			std::cout << arr[i] << "\t";
+		}
+		std::cout << "\n";
+	}
+	std::cout << "\n";
+}
+
+void printMx2(long long arr[][2])
+{
+	long long length = sizeof(arr);
+	for (int i = 0; i < length; i++)
+	{
+		for (int j = 0; j < 2; j++)
+		{
+			std::cout << arr[i] << "\t";
+		}
+		std::cout << "\n";
+	}
+	std::cout << "\n";
+}
+void printArr(long long arr[])
+{
+	long long length = sizeof(arr);
+	for (int i = 0; i < length; i++)
+	{
+		std::cout << arr[i] << "\t";
+	}
+	std::cout << "\n";
+}
+
+long long abs(long long num)
 {
 	return (num < 0) ? num * -1 : num;
+}
+bool reachable(long long pos1[2], long long pos2[2]) //angle of 45°
+{
+	return ((pos1[0] <= pos2[0]) && (pos1[1] <= pos2[1])) ? true : false;
 }
 
 long long max(long long arr[])
@@ -24,28 +74,30 @@ long long max(long long arr[])
 	long long max = 0;
 	for (long long i = 0; i < length; i++)
 	{
-		if (max < arr[i])
-		{
-			max = arr[i];
-		}
+		max = (max < arr[i]) ? arr[i] : max;
 	}
 	return max;
 }
 
-bool reachable(long long pos1[2], long long pos2[2]) //angle of 45°
+long long walter(long long start[2], long long bearingsPoints[][3] = {0}, long long accumulated = 0)
 {
-	if (pos1[0] < pos2[0])
+	printArr(start);
+	printMx3(bearingsPoints);
+	long long length = sizeof(bearingsPoints);
+	if (sizeof(bearingsPoints) == 1)
 	{
+		if (bearingsPoints[0][0] == 0)
+		{
+			cout << accumulated;
+			return accumulated;
+		}
+		cout << accumulated;
+		return accumulated;
 	}
-}
-
-long long walter(long long start[2], long long bearingsPoints[][3], long long accumulated = 0)
-{
 	// if sizeof(bearingPoints) == 1 return accumulated + bearingsPoints[0][3];
 	// else
 	accumulated += bearingsPoints[0][3];
 
-	long long length = sizeof(bearingsPoints);
 	long long arr[length];
 
 	long long auxStart[2];
@@ -61,7 +113,7 @@ long long walter(long long start[2], long long bearingsPoints[][3], long long ac
 		auxStart[0] = bearingsPoints[i][0];
 		auxStart[1] = bearingsPoints[i][1];
 
-		for (int j = 0; j < auxLength; j++)
+		for (long long j = 0; j < auxLength; j++)
 		{
 			if (j != i) // start != end
 			{
@@ -76,10 +128,11 @@ long long walter(long long start[2], long long bearingsPoints[][3], long long ac
 		}
 		arr[i] = walter(auxStart, auxBearingsPoints, accumulated);
 	}
+	printArr(arr);
 	return max(arr);
 }
 
-long long main()
+int main()
 {
 	long long n;
 	cin >> n;
@@ -88,6 +141,7 @@ long long main()
 	long long start[2] = {0, 0};
 	long long maxPoints;
 	long long count = 0;
+
 	for (long long i = 0; i < n; i++)
 	{
 		// x , y , p
@@ -95,6 +149,8 @@ long long main()
 		// filter points
 		if (auxBearingsPoints[1] > auxBearingsPoints[0]) //y > x = imposible
 		{
+			std::cout << "continue ";
+			printArr(auxBearingsPoints);
 			continue;
 		}
 		bearingsPoints[count][0] = auxBearingsPoints[0];
@@ -102,7 +158,8 @@ long long main()
 		bearingsPoints[count][2] = auxBearingsPoints[2];
 		count++;
 	}
+
 	maxPoints = walter(start, bearingsPoints);
-	cout << maxPoints << endl;
+	std::cout << maxPoints << std::endl;
 	return 0;
 }
