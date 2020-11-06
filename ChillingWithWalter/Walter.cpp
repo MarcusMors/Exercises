@@ -1,9 +1,4 @@
 #include <iostream>
-#include <string>
-#include <vector>
-#include <tuple>
-#include <array>
-#include <stack>
 
 using namespace std;
 
@@ -27,6 +22,15 @@ input
 8 0 4
 Output
 9
+Input
+5
+5 5 9
+6 6 2
+6 1 5
+8 0 4
+9 0 3
+Output
+12
 */
 int pass;
 
@@ -53,7 +57,7 @@ void printMx2(long long arr[][2], long long length)
 		std::cout << "\n";
 	}
 }
-void printArr(long long arr[], int length)
+void printArr(long long arr[], long long length)
 {
 	for (int i = 0; i < length; i++)
 	{
@@ -101,8 +105,9 @@ long long max(long long arr[], long long length)
 	return max;
 }
 
-long long walter(long long start[2], long long bearingsPoints[][3] = {0}, long long length = 0, long long accumulated = 0)
+long long walter(long long start[2], long long bearingsPoints[][3] = {0}, long long length = 0, long long accumulated = 0, long long deep = 0)
 {
+	cout << "deepCall \t:" << deep << endl;
 	cout << "Waldo" << endl;
 	printArr(start, 2);
 	cout << "length\t: " << length << endl;
@@ -127,11 +132,11 @@ long long walter(long long start[2], long long bearingsPoints[][3] = {0}, long l
 
 	for (long long i = 0; i < length; i++)
 	{
+		counter = 0;
 		long long auxLength = (length);
 		long long auxBearingsPoints[auxLength][3];
 		cout << "\n\t auxLength = " << auxLength << endl;
 
-		counter = 0;
 		auxStart[0] = bearingsPoints[i][0];
 		auxStart[1] = bearingsPoints[i][1];
 
@@ -154,14 +159,22 @@ long long walter(long long start[2], long long bearingsPoints[][3] = {0}, long l
 		}
 		cin >> pass;
 		cout << accumulated << "\n\n";
-		arr[i] = walter(auxStart, auxBearingsPoints, counter, accumulated + bearingsPoints[i][2]);
+		arr[i] = walter(auxStart, auxBearingsPoints, counter, accumulated + bearingsPoints[i][2], (deep + 1));
+		// arr[i] = walter(auxStart, auxBearingsPoints, counter, accumulated + bearingsPoints[i][2], (deep++));
 		cout << "arr[" << i << "]\t= " << arr[i] << endl;
+		printArr(arr, (i + 1));
+		printArr(arr, length);
+		cout << "deepArr \t:" << deep << endl;
 	}
 	cout << "arr:" << endl;
-	printArr(arr, counter);
+	printArr(arr, length);
+	// printArr(arr, counter);
+	// cout << "length\t: " << length << endl;
+	// cout << "counter\t: " << counter << endl;
+
 	cin >> pass;
-	// return max(arr, counter);
-	return accumulated;
+	return max(arr, length);
+	// return accumulated;
 }
 
 int main()
