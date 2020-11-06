@@ -69,8 +69,8 @@ void printArr(long long arr[], int length)
 
 bool reachable(long long start[2], long long end[2]) //angle of 45°
 {
-	// long long x = end[0] - start[0];
-	// long long y = abs((end[1] - start[1]));
+	long long x = end[0] - start[0];
+	long long y = abs((end[1] - start[1]));
 	// cout << "\nstart\t: ";
 	// printArr(start, 2);
 	// cout << "end\t: ";
